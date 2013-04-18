@@ -37,7 +37,13 @@ else if (strlen(strstr($custom_field, "desc")) > 0) {
                     <div id="current_ex"><br />
                         <img src="/wp-content/themes/franklinstreetworks/images/franklin-images/programs/upcoming.png" />
                         <?php
-                            
+                            $today = date('Y-m-d');
+                            function filter_where( $where = '' ) {
+                                // where post_date > today
+                                $where .= " AND post_date >= '" . date('Y-m-d') . "'"; 
+                                return $where;
+                            }
+                            add_filter( 'posts_where', 'filter_where' );
                             $args = array(
                                 'posts_per_page' => 10,
                                 'cat'      => 8,
@@ -52,15 +58,16 @@ else if (strlen(strstr($custom_field, "desc")) > 0) {
                                 $more = 0;?>
                                 <div class="sixbar" id="nothefirst"></div>
                                 <div class="readmespace">
-                                        <div class="postedby"><span class="greytext"><?php page_excerpt_by($post->ID, "pNOp"); ?></span></div>
-                                        <h1><a href="<?php the_permalink(); ?>" ><?php the_title(); ?></a></h1>
                                         
+                                        <h1><a href="<?php the_permalink(); ?>" ><?php the_title(); ?></a></h1>
+                                        <div class="postedby"><span class="greytext">Program Date: <?php the_date('F d, Y \a\t g:i a'); ?></span></div>
                                         <div class="calevent" id="<?php echo $post->post_name;?>"><?php the_content('READ MORE'); ?><div class="clrflt"></div></div>
                                         
                                         <?php echo get_the_post_thumbnail($page->ID, 'large'); ?>
                                         <div class="clrflt"></div>
                                 </div>
 							<?php endforeach; ?>
+							<div class="archive-link"><a href="/category/exhibition-programs/">View Program Archive</a></div>
                      </div>
                 </div>
                 <div class="foutyeightright">
